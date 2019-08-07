@@ -16,33 +16,45 @@ namespace RockTop.Worlds {
 
         public readonly int Width;
         public readonly int Height;
+        public readonly Random Random;
         private readonly Tile[,] tiles;
 
         public readonly ObservableCollection<Entity> Entities = new ObservableCollection<Entity>();
+        private readonly List<Entity> updatingEntities = new List<Entity>();
 
         public Tile this[int x, int y] {
             get => this.IsOutOfBounds(x, y) ? null : this.tiles[x, y];
             set => this.tiles[x, y] = value;
         }
 
-        public World(int width, int height) {
+        public World(int width, int height, Random random) {
             this.tiles = new Tile[width, height];
             this.Width = width;
             this.Height = height;
+            this.Random = random;
 
             for (var x = 0; x < this.Width; x++) {
                 for (var y = 0; y < this.Height; y++) {
                     this[x, y] = WorldGenerator.Grass;
                 }
             }
+
+            this.Entities.ItemAdded += (sender, args) => {
+                if (args.Item.CanUpdate)
+                    this.updatingEntities.Add(args.Item);
+            };
+            this.Entities.ItemRemoved += (sender, args) => {
+                if (args.Item.CanUpdate)
+                    this.updatingEntities.Remove(args.Item);
+            };
         }
 
         public void Update(GameTime time) {
-            for (var i = this.Entities.Count - 1; i >= 0; i--) {
-                var entity = this.Entities[i];
+            for (var i = this.updatingEntities.Count - 1; i >= 0; i--) {
+                var entity = this.updatingEntities[i];
                 entity.Update(time);
                 if (entity.Dead)
-                    this.Entities.RemoveAt(i);
+                    this.Entities.Remove(entity);
             }
         }
 
@@ -59,14 +71,17 @@ namespace RockTop.Worlds {
                     this[x, y].Draw(batch, this, x, y);
                 }
             }
+            batch.End();
+            batch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp, transformMatrix: camera.ViewMatrix);
             foreach (var entity in this.Entities)
-                entity.Draw(time, batch);
+                if (frustum.Intersects(entity.GetCurrBounds(entity.Position, true)))
+                    entity.Draw(time, batch);
             batch.End();
         }
 
         public IEnumerable<Entity> GetEntities(RectangleF rectangle, params Entity[] excluded) {
             foreach (var entity in this.Entities) {
-                if (entity.Bounds.Intersects(rectangle) && !excluded.Contains(entity))
+                if (entity.GetCurrBounds(entity.Position).Intersects(rectangle) && !excluded.Contains(entity))
                     yield return entity;
             }
         }

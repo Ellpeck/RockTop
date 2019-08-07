@@ -76,6 +76,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Worlds\Entities\Entity.cs" />
         <Compile Include="Worlds\Entities\Player.cs" />
+        <Compile Include="Worlds\Entities\Tree.cs" />
         <Compile Include="Worlds\Tiles\AutoTile.cs" />
         <Compile Include="Worlds\Tiles\Tile.cs" />
         <Compile Include="Worlds\World.cs" />

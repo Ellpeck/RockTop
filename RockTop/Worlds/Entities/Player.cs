@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MLEM.Extensions;
 using MLEM.Startup;
 using MonoGame.Extended;
 using MonoGame.Extended.TextureAtlases;
@@ -10,8 +9,8 @@ using RockTop.Worlds.Tiles;
 namespace RockTop.Worlds.Entities {
     public class Player : Entity {
 
-        public Player(World world) : base(world) {
-            this.Bounds = new RectangleF(-0.5F, -0.5F, 1, 1);
+        public Player(World world) : base(world, true) {
+            this.Bounds = new RectangleF(-0.375F, -0.2F, 0.75F, 0.75F);
         }
 
         public override void Update(GameTime time) {
@@ -37,8 +36,19 @@ namespace RockTop.Worlds.Entities {
 
         public override void Draw(GameTime time, SpriteBatch batch) {
             var pos = this.Position - Vector2.One / 2;
-            batch.Draw(Shadow, pos + new Vector2(0.5F, 2) / Tile.Size, Color.White, 0, Vector2.Zero, Vector2.One / Tile.Size, SpriteEffects.None, 0);
-            batch.Draw(Texture, pos, new Rectangle(0, 0, Tile.Size, Tile.Size), Color.White, 0, Vector2.Zero, Vector2.One / Tile.Size, SpriteEffects.None, 0);
+            batch.Draw(Shadow, pos + new Vector2(0.5F, 2) / Tile.Size, Color.White, 0, Vector2.Zero, Vector2.One / Tile.Size, SpriteEffects.None, this.GetRenderDepth(-0.01F));
+            batch.Draw(Texture, pos, new Rectangle(0, 0, Tile.Size, Tile.Size), Color.White, 0, Vector2.Zero, Vector2.One / Tile.Size, SpriteEffects.None, this.GetRenderDepth());
+        }
+
+        public void Spawn() {
+            var radius = 3;
+            var center = new Point(this.World.Width / 2, this.World.Height / 2);
+            Point spawn;
+            do {
+                spawn = center + new Point(this.World.Random.Next(-radius, radius), this.World.Random.Next(-radius, radius));
+                radius += 2;
+            } while (!this.World[spawn.X, spawn.Y].CanWalkOn);
+            this.Position = spawn.ToVector2() + Vector2.One / 2;
         }
 
     }

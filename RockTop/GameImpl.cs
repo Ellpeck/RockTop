@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using MLEM.Startup;
 using RockTop.Worlds;
@@ -14,9 +15,10 @@ namespace RockTop {
         protected override void LoadContent() {
             base.LoadContent();
 
-            this.World = WorldGenerator.Generate(50, 50);
+            var rand = new Random();
+            this.World = WorldGenerator.Generate(rand, 100, 100, rand.Next());
             this.Player = new Player(this.World);
-            this.Player.Position = new Vector2(25, 25);
+            this.Player.Spawn();
             this.World.Entities.Add(this.Player);
 
             this.camera = new Camera(this.GraphicsDevice) {
@@ -33,7 +35,7 @@ namespace RockTop {
             base.Draw(gameTime);
             this.GraphicsDevice.Clear(Color.Black);
 
-            this.camera.LookAt(Vector2.Lerp(this.camera.LookingPosition, this.Player.Position, 0.15F));
+            this.camera.LookAt(Vector2.Lerp(this.camera.LookingPosition, this.Player.Position, 0.1F));
             this.World.Draw(gameTime, this.SpriteBatch, this.camera);
         }
 
