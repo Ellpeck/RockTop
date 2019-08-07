@@ -16,14 +16,14 @@ namespace RockTop.Worlds.Entities {
 
         public override void Update(GameTime time) {
             var move = new Vector2();
-            var keyboard = MlemGame.Keyboard;
-            if (keyboard.IsKeyDown(Keys.Left))
+            var input = MlemGame.Input;
+            if (input.IsKeyDown(Keys.Left))
                 move.X--;
-            if (keyboard.IsKeyDown(Keys.Right))
+            if (input.IsKeyDown(Keys.Right))
                 move.X++;
-            if (keyboard.IsKeyDown(Keys.Up))
+            if (input.IsKeyDown(Keys.Up))
                 move.Y--;
-            if (keyboard.IsKeyDown(Keys.Down))
+            if (input.IsKeyDown(Keys.Down))
                 move.Y++;
             move *= 0.07F;
 
