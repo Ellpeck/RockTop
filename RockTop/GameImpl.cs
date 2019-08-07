@@ -1,9 +1,9 @@
 using System;
 using Microsoft.Xna.Framework;
+using MLEM.Cameras;
 using MLEM.Startup;
 using RockTop.Worlds;
 using RockTop.Worlds.Entities;
-using MLEM.Cameras;
 
 namespace RockTop {
     public class GameImpl : MlemGame {
@@ -35,7 +35,8 @@ namespace RockTop {
             base.Draw(gameTime);
             this.GraphicsDevice.Clear(Color.Black);
 
-            this.camera.LookAt(Vector2.Lerp(this.camera.LookingPosition, this.Player.Position, 0.1F));
+            this.camera.LookingPosition = Vector2.Lerp(this.camera.LookingPosition, this.Player.Position, 0.1F);
+            this.camera.ConstrainWorldBounds(Vector2.Zero, new Vector2(this.World.Width, this.World.Height));
             this.World.Draw(gameTime, this.SpriteBatch, this.camera);
         }
 

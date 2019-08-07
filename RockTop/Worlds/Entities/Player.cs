@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -46,9 +47,10 @@ namespace RockTop.Worlds.Entities {
             Point spawn;
             do {
                 spawn = center + new Point(this.World.Random.Next(-radius, radius), this.World.Random.Next(-radius, radius));
-                radius += 2;
-            } while (!this.World[spawn.X, spawn.Y].CanWalkOn);
-            this.Position = spawn.ToVector2() + Vector2.One / 2;
+                if (radius < Math.Min(this.World.Width, this.World.Height) / 2)
+                    radius += 2;
+            } while (this.IsSomethingInTheWay(spawn.ToVector2()));
+            this.Position = spawn.ToVector2();
         }
 
     }
