@@ -66,7 +66,7 @@ namespace RockTop.Worlds.Entities {
             this.Position = pos;
 
             if (input.IsKeyPressed(Keys.Space)) {
-                var interactionRect = new RectangleF(this.Position + DirectionOffsets[this.Direction], new Size2(1, 1));
+                var interactionRect = new Rectangle((this.Position + DirectionOffsets[this.Direction]).ToPoint(), new Point(1));
                 foreach (var entity in this.World.GetEntities(interactionRect, this)) {
                     if (entity.OnInteractedWith(this))
                         break;

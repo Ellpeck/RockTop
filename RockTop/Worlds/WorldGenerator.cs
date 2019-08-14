@@ -27,6 +27,8 @@ namespace RockTop.Worlds {
 
                         if (world.Random.NextSingle() >= 0.75F)
                             world.Entities.Add(new Tree(world, new Point(x, y)));
+                        else if (world.Random.NextSingle() >= 0.5F)
+                            world.Entities.Add(new GrassTuft(world, new Point(x, y)));
                     }
                 }
             }

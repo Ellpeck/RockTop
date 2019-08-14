@@ -9,7 +9,8 @@ namespace RockTop.Items {
 
         public static readonly Texture2D Texture = MlemGame.LoadContent<Texture2D>("Textures/Items");
 
-        public static readonly Item Wood = new Item(new Point(0, 0));
+        public static readonly Item Wood = new Item(new Point(0, 0), 5);
+        public static readonly Item Twig = new Item(new Point(8, 0), 20);
 
         public readonly TextureRegion TextureRegion;
         public readonly int MaxAmount;
