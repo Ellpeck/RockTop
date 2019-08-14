@@ -10,6 +10,13 @@ using RockTop.Worlds.Tiles;
 namespace RockTop.Worlds.Entities {
     public abstract class Entity {
 
+        public static Vector2[] DirectionOffsets = {
+            new Vector2(0, 1),
+            new Vector2(0, -1),
+            new Vector2(-1, 0),
+            new Vector2(1, 0)
+        };
+
         public static readonly Texture2D Texture = MlemGame.LoadContent<Texture2D>("Textures/Entities");
         public static readonly TextureRegion2D Shadow = new TextureRegion2D(Texture, 0, 0, Tile.Size, Tile.Size);
 
@@ -29,6 +36,14 @@ namespace RockTop.Worlds.Entities {
         }
 
         public virtual void Draw(GameTime time, SpriteBatch batch) {
+        }
+
+        public virtual bool OnInteractedWith(Player player) {
+            return false;
+        }
+
+        public virtual bool CollidesWith(Entity other) {
+            return true;
         }
 
         public RectangleF GetCurrBounds(Vector2 position, bool visual = false) {
@@ -52,7 +67,11 @@ namespace RockTop.Worlds.Entities {
                 }
             }
 
-            return this.World.GetEntities(bounds, this).Any();
+            foreach (var entity in this.World.GetEntities(bounds, this)) {
+                if (entity.CollidesWith(this))
+                    return true;
+            }
+            return false;
         }
 
     }

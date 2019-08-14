@@ -1,12 +1,21 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MLEM.Cameras;
+using MLEM.Font;
 using MLEM.Startup;
+using MLEM.Textures;
+using MLEM.Ui;
+using MLEM.Ui.Elements;
+using MLEM.Ui.Style;
+using RockTop.Ui;
 using RockTop.Worlds;
 using RockTop.Worlds.Entities;
 
 namespace RockTop {
     public class GameImpl : MlemGame {
+
+        public static SpriteFont Font;
 
         public World World;
         public Player Player;
@@ -24,6 +33,19 @@ namespace RockTop {
             this.camera = new Camera(this.GraphicsDevice) {
                 Scale = 80
             };
+
+            Font = LoadContent<SpriteFont>("Fonts/Font");
+            this.UiSystem.GlobalScale = 5;
+            this.UiSystem.Style = new UntexturedStyle(this.SpriteBatch) {
+                TextScale = 0.125F,
+                Font = new GenericSpriteFont(Font)
+            };
+
+            var hotbar = new Group(Anchor.BottomCenter, new Vector2(150, 15), false) {PositionOffset = new Point(0, 5)};
+            for (var i = 0; i < this.Player.Inventory.Length; i++) {
+                hotbar.AddChild(new ItemSlot(Anchor.AutoInline, new Vector2(15, 15), this.Player.Inventory, i));
+            }
+            this.UiSystem.Add("Hotbar", hotbar);
         }
 
         protected override void Update(GameTime gameTime) {
@@ -32,12 +54,13 @@ namespace RockTop {
         }
 
         protected override void Draw(GameTime gameTime) {
-            base.Draw(gameTime);
             this.GraphicsDevice.Clear(Color.Black);
 
             this.camera.LookingPosition = Vector2.Lerp(this.camera.LookingPosition, this.Player.Position, 0.1F);
             this.camera.ConstrainWorldBounds(Vector2.Zero, new Vector2(this.World.Width, this.World.Height));
             this.World.Draw(gameTime, this.SpriteBatch, this.camera);
+
+            base.Draw(gameTime);
         }
 
     }

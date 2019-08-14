@@ -7,6 +7,7 @@ using MLEM.Startup;
 using MLEM.Textures;
 using MonoGame.Extended;
 using MonoGame.Extended.TextureAtlases;
+using RockTop.Items;
 using RockTop.Worlds.Tiles;
 
 namespace RockTop.Worlds.Entities {
@@ -15,6 +16,8 @@ namespace RockTop.Worlds.Entities {
         private readonly SpriteAnimationGroup animations;
         public bool IsMoving;
         public int Direction;
+
+        public readonly ItemStack[] Inventory = new ItemStack[10];
 
         public Player(World world) : base(world, true) {
             this.Bounds = new RectangleF(-0.375F, -0.2F, 0.75F, 0.75F);
@@ -62,7 +65,39 @@ namespace RockTop.Worlds.Entities {
                 pos.Y += move.Y;
             this.Position = pos;
 
+            if (input.IsKeyPressed(Keys.Space)) {
+                var interactionRect = new RectangleF(this.Position + DirectionOffsets[this.Direction], new Size2(1, 1));
+                foreach (var entity in this.World.GetEntities(interactionRect, this)) {
+                    if (entity.OnInteractedWith(this))
+                        break;
+                }
+            }
+
+            foreach (var entity in this.World.GetEntities(this.GetCurrBounds(this.Position), this)) {
+                if (!(entity is DroppedItem item))
+                    continue;
+                if (this.AddToInventory(ref item.Stack))
+                    entity.Dead = true;
+            }
+
             this.animations.Update(time);
+        }
+
+        public bool AddToInventory(ref ItemStack item) {
+            for (var i = 0; i < this.Inventory.Length; i++) {
+                ref var slot = ref this.Inventory[i];
+                if (slot.IsEmpty()) {
+                    this.Inventory[i] = item;
+                    return true;
+                } else if (slot.Item == item.Item) {
+                    var canAdd = Math.Min(slot.Item.MaxAmount - slot.Amount, item.Amount);
+                    slot.Amount += canAdd;
+                    item.Amount -= canAdd;
+                    if (item.IsEmpty())
+                        return true;
+                }
+            }
+            return false;
         }
 
         public override void Draw(GameTime time, SpriteBatch batch) {

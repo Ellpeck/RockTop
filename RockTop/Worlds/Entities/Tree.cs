@@ -2,10 +2,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.TextureAtlases;
+using RockTop.Items;
 using RockTop.Worlds.Tiles;
 
 namespace RockTop.Worlds.Entities {
     public class Tree : Entity {
+
+        private int durability = 3;
 
         public Tree(World world, Point point) : base(world, false) {
             this.Position = point.ToVector2() + Vector2.One / 2;
@@ -13,6 +16,18 @@ namespace RockTop.Worlds.Entities {
             this.VisualBounds = new RectangleF(-0.5F, -0.75F, 1, 1.25F);
         }
 
+        public override bool OnInteractedWith(Player player) {
+            this.durability--;
+            if (this.durability <= 0) {
+                this.World.Entities.Remove(this);
+                for (var i = 0; i < 3; i++)
+                    this.World.Entities.Add(new DroppedItem(this.World, new ItemStack(Item.Wood)) {
+                        Position = this.Position,
+                        Motion = new Vector2(this.World.Random.NextSingle(-0.1F, 0.1F), this.World.Random.NextSingle(-0.1F, 0.1F))
+                    });
+            }
+            return true;
+        }
 
         public override void Draw(GameTime time, SpriteBatch batch) {
             var pos = this.Position - Vector2.One / 2;
