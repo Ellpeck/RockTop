@@ -17,7 +17,7 @@ namespace RockTop.Worlds.Entities {
         public override void Draw(GameTime time, SpriteBatch batch) {
             var pos = this.Position - Vector2.One / 2;
             batch.Draw(Shadow, pos + new Vector2(0, 0) / Tile.Size, Color.White, 0, Vector2.Zero, Vector2.One / Tile.Size, SpriteEffects.None, this.GetRenderDepth(-0.01F));
-            batch.Draw(Texture, pos + new Vector2(0, -2) / Tile.Size, new Rectangle(2 * Tile.Size, 0, Tile.Size, Tile.Size), Color.White, 0, Vector2.Zero, Vector2.One / Tile.Size, SpriteEffects.None, this.GetRenderDepth());
+            batch.Draw(Texture, pos + new Vector2(0, -2) / Tile.Size, new Rectangle(Tile.Size, 0, Tile.Size, Tile.Size), Color.White, 0, Vector2.Zero, Vector2.One / Tile.Size, SpriteEffects.None, this.GetRenderDepth());
         }
 
     }

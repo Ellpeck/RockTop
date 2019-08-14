@@ -11,7 +11,7 @@ namespace RockTop.Worlds.Entities {
     public abstract class Entity {
 
         public static readonly Texture2D Texture = MlemGame.LoadContent<Texture2D>("Textures/Entities");
-        public static readonly TextureRegion2D Shadow = new TextureRegion2D(Texture, Tile.Size, 0, Tile.Size, Tile.Size);
+        public static readonly TextureRegion2D Shadow = new TextureRegion2D(Texture, 0, 0, Tile.Size, Tile.Size);
 
         public readonly World World;
         public readonly bool CanUpdate;
