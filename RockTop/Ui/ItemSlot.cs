@@ -21,6 +21,16 @@ namespace RockTop.Ui {
             this.Inventory = inventory;
             this.Index = index;
             this.Padding = new Point(2, 2);
+
+            var tooltip = new Tooltip(100, "") {Padding = new Point(2, 0)};
+            this.OnMouseEnter += element => {
+                var item = this.Inventory[this.Index];
+                if (!item.IsEmpty()) {
+                    tooltip.Text = item.Item.Name;
+                    this.System.Add("ItemSlotTooltip", tooltip);
+                }
+            };
+            this.OnMouseExit += element => this.System.Remove("ItemSlotTooltip");
         }
 
         public override void Draw(GameTime time, SpriteBatch batch, float alpha, Point offset) {

@@ -47,7 +47,10 @@ namespace RockTop {
                 Font = new GenericSpriteFont(Font)
             };
 
-            var hotbar = new Group(Anchor.BottomCenter, new Vector2(this.Player.Inventory.Length * 15, 15), false) {PositionOffset = new Point(0, 5)};
+            var hotbar = new Group(Anchor.BottomCenter, new Vector2(this.Player.Inventory.Length * 15, 15), false) {
+                PositionOffset = new Vector2(0, 5),
+                IgnoresMouse = false
+            };
             for (var i = 0; i < this.Player.Inventory.Length; i++) {
                 hotbar.AddChild(new ItemSlot(Anchor.AutoInline, new Vector2(15, 15), this.Player.Inventory, i));
             }
@@ -59,14 +62,14 @@ namespace RockTop {
             this.World.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime) {
+        protected override void DoDraw(GameTime gameTime) {
             this.GraphicsDevice.Clear(Color.Black);
 
             this.Camera.LookingPosition = Vector2.Lerp(this.Camera.LookingPosition, this.Player.Position, 0.1F);
             this.Camera.ConstrainWorldBounds(Vector2.Zero, new Vector2(this.World.Width, this.World.Height));
             this.World.Draw(gameTime, this.SpriteBatch, this.Camera);
 
-            base.Draw(gameTime);
+            base.DoDraw(gameTime);
         }
 
     }
