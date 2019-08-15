@@ -15,11 +15,17 @@ using RockTop.Worlds.Entities;
 namespace RockTop {
     public class GameImpl : MlemGame {
 
+        public static GameImpl Instance { get; private set; }
         public static SpriteFont Font;
 
         public World World;
         public Player Player;
-        private Camera camera;
+        public Camera Camera;
+
+        public GameImpl() {
+            Instance = this;
+            this.IsMouseVisible = true;
+        }
 
         protected override void LoadContent() {
             base.LoadContent();
@@ -30,7 +36,7 @@ namespace RockTop {
             this.Player.Spawn();
             this.World.Entities.Add(this.Player);
 
-            this.camera = new Camera(this.GraphicsDevice) {
+            this.Camera = new Camera(this.GraphicsDevice) {
                 Scale = 80
             };
 
@@ -41,7 +47,7 @@ namespace RockTop {
                 Font = new GenericSpriteFont(Font)
             };
 
-            var hotbar = new Group(Anchor.BottomCenter, new Vector2(150, 15), false) {PositionOffset = new Point(0, 5)};
+            var hotbar = new Group(Anchor.BottomCenter, new Vector2(this.Player.Inventory.Length * 15, 15), false) {PositionOffset = new Point(0, 5)};
             for (var i = 0; i < this.Player.Inventory.Length; i++) {
                 hotbar.AddChild(new ItemSlot(Anchor.AutoInline, new Vector2(15, 15), this.Player.Inventory, i));
             }
@@ -56,9 +62,9 @@ namespace RockTop {
         protected override void Draw(GameTime gameTime) {
             this.GraphicsDevice.Clear(Color.Black);
 
-            this.camera.LookingPosition = Vector2.Lerp(this.camera.LookingPosition, this.Player.Position, 0.1F);
-            this.camera.ConstrainWorldBounds(Vector2.Zero, new Vector2(this.World.Width, this.World.Height));
-            this.World.Draw(gameTime, this.SpriteBatch, this.camera);
+            this.Camera.LookingPosition = Vector2.Lerp(this.Camera.LookingPosition, this.Player.Position, 0.1F);
+            this.Camera.ConstrainWorldBounds(Vector2.Zero, new Vector2(this.World.Width, this.World.Height));
+            this.World.Draw(gameTime, this.SpriteBatch, this.Camera);
 
             base.Draw(gameTime);
         }

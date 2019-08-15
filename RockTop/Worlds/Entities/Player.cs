@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MLEM.Animations;
+using MLEM.Input;
 using MLEM.Startup;
 using MLEM.Textures;
 using MonoGame.Extended;
@@ -17,7 +18,7 @@ namespace RockTop.Worlds.Entities {
         public bool IsMoving;
         public int Direction;
 
-        public readonly ItemStack[] Inventory = new ItemStack[10];
+        public readonly ItemStack[] Inventory = new ItemStack[12];
 
         public Player(World world) : base(world, true) {
             this.Bounds = new RectangleF(-0.375F, -0.2F, 0.75F, 0.75F);
@@ -39,19 +40,19 @@ namespace RockTop.Worlds.Entities {
         public override void Update(GameTime time) {
             var move = new Vector2();
             var input = MlemGame.Input;
-            if (input.IsKeyDown(Keys.Left)) {
+            if (input.IsKeyDown(Keys.A)) {
                 move.X--;
                 this.Direction = 2;
             }
-            if (input.IsKeyDown(Keys.Right)) {
+            if (input.IsKeyDown(Keys.D)) {
                 move.X++;
                 this.Direction = 3;
             }
-            if (input.IsKeyDown(Keys.Up)) {
+            if (input.IsKeyDown(Keys.W)) {
                 move.Y--;
                 this.Direction = 1;
             }
-            if (input.IsKeyDown(Keys.Down)) {
+            if (input.IsKeyDown(Keys.S)) {
                 move.Y++;
                 this.Direction = 0;
             }
@@ -65,11 +66,14 @@ namespace RockTop.Worlds.Entities {
                 pos.Y += move.Y;
             this.Position = pos;
 
-            if (input.IsKeyPressed(Keys.Space)) {
-                var interactionRect = new Rectangle((this.Position + DirectionOffsets[this.Direction]).ToPoint(), new Point(1));
-                foreach (var entity in this.World.GetEntities(interactionRect, this)) {
-                    if (entity.OnInteractedWith(this))
-                        break;
+            if (input.IsMouseButtonPressed(MouseButton.Left)) {
+                var mouseWorld = GameImpl.Instance.Camera.ToWorldPos(MlemGame.Input.MousePosition.ToVector2());
+                if (Vector2.DistanceSquared(mouseWorld, this.Position) <= 2 * 2) {
+                    this.Face(mouseWorld);
+                    foreach (var entity in this.World.GetEntities(new Rectangle(mouseWorld.ToPoint(), new Point(1)), this)) {
+                        if (entity.OnInteractedWith(this))
+                            break;
+                    }
                 }
             }
 
@@ -81,6 +85,15 @@ namespace RockTop.Worlds.Entities {
             }
 
             this.animations.Update(time);
+        }
+
+        public void Face(Vector2 position) {
+            var (distX, distY) = position - this.Position;
+            if (Math.Abs(distX) > Math.Abs(distY)) {
+                this.Direction = distX > 0 ? 3 : 2;
+            } else {
+                this.Direction = distY > 0 ? 0 : 1;
+            }
         }
 
         public bool AddToInventory(ref ItemStack item) {
