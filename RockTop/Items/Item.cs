@@ -9,14 +9,15 @@ namespace RockTop.Items {
 
         public static readonly Texture2D Texture = MlemGame.LoadContent<Texture2D>("Textures/Items");
 
-        public static readonly Item Wood = new Item("Wood", new Point(0, 0), 5);
-        public static readonly Item Twig = new Item("Twig", new Point(8, 0), 20);
+        public static readonly Item Wood = new Item("Wood", new Point(0, 0), 10);
+        public static readonly Item Twig = new Item("Twig", new Point(8, 0), 30);
+        public static readonly Item Rock = new Item("Rock", new Point(16, 0), 20);
 
         public readonly string Name;
         public readonly TextureRegion TextureRegion;
         public readonly int MaxAmount;
 
-        public Item(string name, Point textureCoord, int maxAmount = 10) {
+        public Item(string name, Point textureCoord, int maxAmount) {
             this.Name = name;
             this.TextureRegion = new TextureRegion(Texture, new Rectangle(textureCoord, new Point(Tile.Size)));
             this.MaxAmount = maxAmount;

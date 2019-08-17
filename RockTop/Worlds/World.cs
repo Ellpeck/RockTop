@@ -35,7 +35,7 @@ namespace RockTop.Worlds {
 
             for (var x = 0; x < this.Width; x++) {
                 for (var y = 0; y < this.Height; y++) {
-                    this[x, y] = WorldGenerator.Grass;
+                    this[x, y] = Tile.Grass();
                 }
             }
 

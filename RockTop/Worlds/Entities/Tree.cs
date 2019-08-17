@@ -8,7 +8,7 @@ using RockTop.Worlds.Tiles;
 namespace RockTop.Worlds.Entities {
     public class Tree : PunchableEntity {
         
-        public Tree(World world, Point point) : base(world, false, 5, new ItemStack(Item.Wood), 3) {
+        public Tree(World world, Point point) : base(world, false, 5, new ItemStack(Item.Wood), 2) {
             this.Position = point.ToVector2() + Vector2.One / 2;
             this.Bounds = new RectangleF(-0.35F, -0.25F, 0.7F, 0.5F);
             this.VisualBounds = new RectangleF(-0.5F, -0.75F, 1, 1.25F);

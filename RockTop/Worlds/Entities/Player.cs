@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MLEM.Animations;
+using MLEM.Extensions;
 using MLEM.Input;
 using MLEM.Startup;
 using MLEM.Textures;
@@ -17,6 +18,7 @@ namespace RockTop.Worlds.Entities {
         private readonly SpriteAnimationGroup animations;
         public bool IsMoving;
         public int Direction;
+        private double attackCooldown;
 
         public readonly ItemStack[] Inventory = new ItemStack[12];
 
@@ -66,15 +68,11 @@ namespace RockTop.Worlds.Entities {
                 pos.Y += move.Y;
             this.Position = pos;
 
-            if (input.IsMouseButtonPressed(MouseButton.Left)) {
-                var mouseWorld = GameImpl.Instance.Camera.ToWorldPos(MlemGame.Input.MousePosition.ToVector2());
-                if (Vector2.DistanceSquared(mouseWorld, this.Position) <= 2 * 2) {
-                    this.Face(mouseWorld);
-                    foreach (var entity in this.World.GetEntities(new Rectangle(mouseWorld.ToPoint(), new Point(1)), this)) {
-                        if (entity.OnInteractedWith(this))
-                            break;
-                    }
-                }
+            if (this.attackCooldown <= 0) {
+                if (input.IsMouseButtonDown(MouseButton.Left) && this.Attack())
+                    this.attackCooldown = 0.15;
+            } else {
+                this.attackCooldown -= time.GetElapsedSeconds();
             }
 
             foreach (var entity in this.World.GetEntities(this.GetCurrBounds(this.Position), this)) {
@@ -85,6 +83,23 @@ namespace RockTop.Worlds.Entities {
             }
 
             this.animations.Update(time);
+        }
+
+        private bool Attack() {
+            var mouseWorld = GameImpl.Instance.Camera.ToWorldPos(MlemGame.Input.MousePosition.ToVector2());
+            var mousePoint = mouseWorld.ToPoint();
+
+            if (Vector2.DistanceSquared(mouseWorld, this.Position) <= 2 * 2) {
+                this.Face(mouseWorld);
+                foreach (var entity in this.World.GetEntities(new Rectangle(mousePoint, new Point(1)), this)) {
+                    if (entity.OnInteractedWith(this))
+                        return true;
+                }
+
+                var tile = this.World[mousePoint.X, mousePoint.Y];
+                return tile.OnInteractedWith(this.World, mousePoint.X, mousePoint.Y, this);
+            }
+            return false;
         }
 
         public void Face(Vector2 position) {

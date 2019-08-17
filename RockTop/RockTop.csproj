@@ -82,7 +82,7 @@
         <Compile Include="Worlds\Entities\Player.cs" />
         <Compile Include="Worlds\Entities\PunchableEntity.cs" />
         <Compile Include="Worlds\Entities\Tree.cs" />
-        <Compile Include="Worlds\Tiles\AutoTile.cs" />
+        <Compile Include="Worlds\Tiles\PunchableTile.cs" />
         <Compile Include="Worlds\Tiles\Tile.cs" />
         <Compile Include="Worlds\World.cs" />
         <Compile Include="Worlds\WorldGenerator.cs" />

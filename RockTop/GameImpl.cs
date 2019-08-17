@@ -18,7 +18,10 @@ namespace RockTop {
         public static GameImpl Instance { get; private set; }
         public static SpriteFont Font;
 
-        public World World;
+        public World CurrentWorld => this.Player.World;
+        public World Overworld;
+        public World CaveWorld;
+
         public Player Player;
         public Camera Camera;
 
@@ -31,10 +34,12 @@ namespace RockTop {
             base.LoadContent();
 
             var rand = new Random();
-            this.World = WorldGenerator.Generate(rand, 100, 100, rand.Next());
-            this.Player = new Player(this.World);
+            this.Overworld = WorldGenerator.GenerateOverworld(rand, 100, 100, rand.Next());
+            this.CaveWorld = WorldGenerator.GenerateCaves(rand, 100, 100, rand.Next());
+
+            this.Player = new Player(this.CaveWorld);
             this.Player.Spawn();
-            this.World.Entities.Add(this.Player);
+            this.CurrentWorld.Entities.Add(this.Player);
 
             this.Camera = new Camera(this.GraphicsDevice) {
                 Scale = 80
@@ -59,15 +64,16 @@ namespace RockTop {
 
         protected override void Update(GameTime gameTime) {
             base.Update(gameTime);
-            this.World.Update(gameTime);
+            this.Overworld.Update(gameTime);
+            this.CaveWorld.Update(gameTime);
         }
 
         protected override void DoDraw(GameTime gameTime) {
             this.GraphicsDevice.Clear(Color.Black);
 
             this.Camera.LookingPosition = Vector2.Lerp(this.Camera.LookingPosition, this.Player.Position, 0.1F);
-            this.Camera.ConstrainWorldBounds(Vector2.Zero, new Vector2(this.World.Width, this.World.Height));
-            this.World.Draw(gameTime, this.SpriteBatch, this.Camera);
+            this.Camera.ConstrainWorldBounds(Vector2.Zero, new Vector2(this.CurrentWorld.Width, this.CurrentWorld.Height));
+            this.CurrentWorld.Draw(gameTime, this.SpriteBatch, this.Camera);
 
             base.DoDraw(gameTime);
         }
