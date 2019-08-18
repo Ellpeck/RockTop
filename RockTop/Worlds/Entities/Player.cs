@@ -10,6 +10,7 @@ using MLEM.Textures;
 using MonoGame.Extended;
 using MonoGame.Extended.TextureAtlases;
 using RockTop.Items;
+using RockTop.Ui;
 using RockTop.Worlds.Tiles;
 
 namespace RockTop.Worlds.Entities {
@@ -71,6 +72,8 @@ namespace RockTop.Worlds.Entities {
             if (this.attackCooldown <= 0) {
                 if (input.IsMouseButtonDown(MouseButton.Left) && this.Attack())
                     this.attackCooldown = 0.15;
+                if (input.IsMouseButtonPressed(MouseButton.Right) && this.Place())
+                    this.attackCooldown = 0.25;
             } else {
                 this.attackCooldown -= time.GetElapsedSeconds();
             }
@@ -86,10 +89,10 @@ namespace RockTop.Worlds.Entities {
         }
 
         private bool Attack() {
-            var mouseWorld = GameImpl.Instance.Camera.ToWorldPos(MlemGame.Input.MousePosition.ToVector2());
+            var mouseWorld = this.GetMousedPosition();
             var mousePoint = mouseWorld.ToPoint();
 
-            if (Vector2.DistanceSquared(mouseWorld, this.Position) <= 2 * 2) {
+            if (this.CanReach(mouseWorld)) {
                 this.Face(mouseWorld);
                 foreach (var entity in this.World.GetEntities(new Rectangle(mousePoint, new Point(1)), this)) {
                     if (entity.OnInteractedWith(this))
@@ -102,6 +105,25 @@ namespace RockTop.Worlds.Entities {
             return false;
         }
 
+        private bool Place() {
+            var selected = GameImpl.Instance.UiSystem.SelectedElement;
+            if (selected is ItemSlot slot) {
+                ref var stack = ref slot.Inventory[slot.Index];
+                if (!stack.IsEmpty()) {
+                    stack.Item.OnInteractWith(this, ref stack);
+                }
+            }
+            return false;
+        }
+
+        public Vector2 GetMousedPosition() {
+            return GameImpl.Instance.Camera.ToWorldPos(MlemGame.Input.MousePosition.ToVector2());
+        }
+
+        public bool CanReach(Vector2 position) {
+            return Vector2.DistanceSquared(position, this.Position) <= 2 * 2;
+        }
+
         public void Face(Vector2 position) {
             var (distX, distY) = position - this.Position;
             if (Math.Abs(distX) > Math.Abs(distY)) {
@@ -109,6 +131,10 @@ namespace RockTop.Worlds.Entities {
             } else {
                 this.Direction = distY > 0 ? 0 : 1;
             }
+        }
+
+        public bool AddToInventory(ItemStack stack) {
+            return this.AddToInventory(ref stack);
         }
 
         public bool AddToInventory(ref ItemStack item) {

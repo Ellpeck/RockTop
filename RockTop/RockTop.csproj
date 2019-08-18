@@ -73,6 +73,7 @@
     <ItemGroup>
         <Compile Include="GameImpl.cs" />
         <Compile Include="Items\Item.cs" />
+        <Compile Include="Items\PlaceableItem.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Ui\ItemSlot.cs" />
@@ -82,6 +83,7 @@
         <Compile Include="Worlds\Entities\Player.cs" />
         <Compile Include="Worlds\Entities\PunchableEntity.cs" />
         <Compile Include="Worlds\Entities\Tree.cs" />
+        <Compile Include="Worlds\Entities\Workbench.cs" />
         <Compile Include="Worlds\Tiles\PunchableTile.cs" />
         <Compile Include="Worlds\Tiles\Tile.cs" />
         <Compile Include="Worlds\World.cs" />

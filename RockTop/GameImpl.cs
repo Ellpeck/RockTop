@@ -8,6 +8,7 @@ using MLEM.Textures;
 using MLEM.Ui;
 using MLEM.Ui.Elements;
 using MLEM.Ui.Style;
+using RockTop.Items;
 using RockTop.Ui;
 using RockTop.Worlds;
 using RockTop.Worlds.Entities;
@@ -37,7 +38,8 @@ namespace RockTop {
             this.Overworld = WorldGenerator.GenerateOverworld(rand, 100, 100, rand.Next());
             this.CaveWorld = WorldGenerator.GenerateCaves(rand, 100, 100, rand.Next());
 
-            this.Player = new Player(this.CaveWorld);
+            this.Player = new Player(this.Overworld);
+            this.Player.AddToInventory(new ItemStack(Item.Workbench));
             this.Player.Spawn();
             this.CurrentWorld.Entities.Add(this.Player);
 
@@ -52,12 +54,12 @@ namespace RockTop {
                 Font = new GenericSpriteFont(Font)
             };
 
-            var hotbar = new Group(Anchor.BottomCenter, new Vector2(this.Player.Inventory.Length * 15, 15), false) {
+            var hotbar = new Group(Anchor.BottomCenter, new Vector2(this.Player.Inventory.Length * 16, 16), false) {
                 PositionOffset = new Vector2(0, 5),
                 IgnoresMouse = false
             };
             for (var i = 0; i < this.Player.Inventory.Length; i++) {
-                hotbar.AddChild(new ItemSlot(Anchor.AutoInline, new Vector2(15, 15), this.Player.Inventory, i));
+                hotbar.AddChild(new ItemSlot(Anchor.AutoInline, new Vector2(16), this.Player.Inventory, i));
             }
             this.UiSystem.Add("Hotbar", hotbar);
         }

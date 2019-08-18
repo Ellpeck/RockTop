@@ -7,6 +7,7 @@ using MLEM.Textures;
 using MLEM.Ui;
 using MLEM.Ui.Elements;
 using MLEM.Ui.Style;
+using MonoGame.Extended;
 using RockTop.Items;
 
 namespace RockTop.Ui {
@@ -20,7 +21,7 @@ namespace RockTop.Ui {
         public ItemSlot(Anchor anchor, Vector2 size, ItemStack[] inventory, int index) : base(anchor, size) {
             this.Inventory = inventory;
             this.Index = index;
-            this.Padding = new Point(2, 2);
+            this.Padding = new Point(3);
 
             var tooltip = new Tooltip(100, "") {Padding = new Point(2, 0)};
             this.OnMouseEnter += element => {
@@ -40,6 +41,10 @@ namespace RockTop.Ui {
                 this.font.DrawCenteredString(batch, item.Amount.ToString(),
                     (this.DisplayArea.Location + offset + this.DisplayArea.Size).ToVector2(),
                     this.textScale * this.Scale, Color.White * alpha, true, true);
+
+                if (this.IsSelected) {
+                    batch.DrawRectangle(this.Area, Color.Red, this.Scale);
+                }
             }
             base.Draw(time, batch, alpha, offset);
         }
