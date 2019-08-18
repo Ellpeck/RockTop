@@ -16,6 +16,7 @@ namespace RockTop.Items {
             if (player.CanReach(moused)) {
                 var entity = this.creator(player.World, moused);
                 if (entity != null && !entity.IsSomethingInTheWay(entity.Position)) {
+                    player.Face(entity.Position);
                     player.World.Entities.Add(entity);
                     stack.Amount--;
                 }

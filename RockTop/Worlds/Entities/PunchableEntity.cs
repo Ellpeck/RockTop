@@ -16,7 +16,7 @@ namespace RockTop.Worlds.Entities {
             this.DropAmount = amount;
         }
 
-        public override bool OnInteractedWith(Player player) {
+        public override bool OnAttacked(Player player) {
             this.Durability--;
             if (this.Durability <= 0) {
                 this.World.Entities.Remove(this);

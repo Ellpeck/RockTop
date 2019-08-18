@@ -72,7 +72,7 @@ namespace RockTop.Worlds.Entities {
             if (this.attackCooldown <= 0) {
                 if (input.IsMouseButtonDown(MouseButton.Left) && this.Attack())
                     this.attackCooldown = 0.15;
-                if (input.IsMouseButtonPressed(MouseButton.Right) && this.Place())
+                if (input.IsMouseButtonPressed(MouseButton.Right) && this.Interact())
                     this.attackCooldown = 0.25;
             } else {
                 this.attackCooldown -= time.GetElapsedSeconds();
@@ -95,17 +95,17 @@ namespace RockTop.Worlds.Entities {
             if (this.CanReach(mouseWorld)) {
                 this.Face(mouseWorld);
                 foreach (var entity in this.World.GetEntities(new Rectangle(mousePoint, new Point(1)), this)) {
-                    if (entity.OnInteractedWith(this))
+                    if (entity.OnAttacked(this))
                         return true;
                 }
 
                 var tile = this.World[mousePoint.X, mousePoint.Y];
-                return tile.OnInteractedWith(this.World, mousePoint.X, mousePoint.Y, this);
+                return tile.OnAttacked(this.World, mousePoint.X, mousePoint.Y, this);
             }
             return false;
         }
 
-        private bool Place() {
+        private bool Interact() {
             var selected = GameImpl.Instance.UiSystem.SelectedElement;
             if (selected is ItemSlot slot) {
                 ref var stack = ref slot.Inventory[slot.Index];

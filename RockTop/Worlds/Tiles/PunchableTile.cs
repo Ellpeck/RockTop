@@ -40,7 +40,7 @@ namespace RockTop.Worlds.Tiles {
                 batch.Draw(CrackTextures[crackIndex - 1], new Rectangle(x, y, 1, 1), Color.White);
         }
 
-        public override bool OnInteractedWith(World world, int x, int y, Player player) {
+        public override bool OnAttacked(World world, int x, int y, Player player) {
             this.CurrDurability--;
             if (this.CurrDurability <= 0) {
                 world[x, y] = this.ReplacementTile();

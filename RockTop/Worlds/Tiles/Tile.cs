@@ -37,7 +37,7 @@ namespace RockTop.Worlds.Tiles {
             }
         }
 
-        public virtual bool OnInteractedWith(World world, int x, int y, Player player) {
+        public virtual bool OnAttacked(World world, int x, int y, Player player) {
             return false;
         }
 

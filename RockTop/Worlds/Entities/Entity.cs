@@ -38,7 +38,7 @@ namespace RockTop.Worlds.Entities {
         public virtual void Draw(GameTime time, SpriteBatch batch) {
         }
 
-        public virtual bool OnInteractedWith(Player player) {
+        public virtual bool OnAttacked(Player player) {
             return false;
         }
 
