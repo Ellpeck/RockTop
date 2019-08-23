@@ -44,11 +44,13 @@ namespace RockTop {
             this.CurrentWorld.Entities.Add(this.Player);
 
             this.Camera = new Camera(this.GraphicsDevice) {
-                Scale = 80
+                Scale = 80,
+                AutoScaleWithScreen = true
             };
 
             Font = LoadContent<SpriteFont>("Fonts/Font");
             this.UiSystem.GlobalScale = 5;
+            this.UiSystem.AutoScaleWithScreen = true;
             this.UiSystem.Style = new UntexturedStyle(this.SpriteBatch) {
                 TextScale = 0.125F,
                 Font = new GenericSpriteFont(Font)

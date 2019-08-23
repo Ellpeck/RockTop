@@ -37,20 +37,20 @@
           <HintPath>..\packages\Coroutine.1.0.1\lib\netstandard2.0\Coroutine.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="MLEM, Version=1.0.18.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\MLEM.1.0.18\lib\netstandard2.0\MLEM.dll</HintPath>
+        <Reference Include="MLEM, Version=1.0.20.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\MLEM.1.0.20\lib\netstandard2.0\MLEM.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="MLEM.Extended, Version=1.0.7.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\MLEM.Extended.1.0.7\lib\netstandard2.0\MLEM.Extended.dll</HintPath>
+        <Reference Include="MLEM.Extended, Version=1.0.8.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\MLEM.Extended.1.0.8\lib\netstandard2.0\MLEM.Extended.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="MLEM.Startup, Version=1.0.4.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\MLEM.Startup.1.0.4\lib\netstandard2.0\MLEM.Startup.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="MLEM.Ui, Version=1.0.6.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\MLEM.Ui.1.0.6\lib\netstandard2.0\MLEM.Ui.dll</HintPath>
+        <Reference Include="MLEM.Ui, Version=1.0.9.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\MLEM.Ui.1.0.9\lib\netstandard2.0\MLEM.Ui.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="MonoGame.Extended, Version=3.6.0.0, Culture=neutral, PublicKeyToken=null">
